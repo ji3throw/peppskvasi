@@ -1,6 +1,6 @@
 // Strapi API configuration
-const STRAPI_API_URL = 'http://localhost:1337/api'; // Adjust this URL based on your Strapi setup
-const STRAPI_API_TOKEN = '7a857b7a04ab7a261eeb90cca2f21dc96866bf349bf1cd961a4a3eae30f34a9b6cf8c46dc9032a226d5d7db743cec335c9a8076c1b75a58415af859115d762dc45d5425fe18105ea8c0805adc72f71c125081edd64039c68d2512ca1e0f3b19e95013002148a37633e91c2af70662cb5e45c0bbcd2a85928701ce602e55f9c52'; // Replace with your actual API token
+const STRAPI_API_URL = 'https://artistic-nurture-ef3b87498b.strapiapp.com/api';
+const STRAPI_API_TOKEN = '6a9cf10cf2949fdeb65e54962c00b1ee338e601271c8e5d4b9f28f29a94ebed9f40777a794d6850a12c60c21b726ef25eb1b7ff8982ceb5a3246f8372a5019be3f792521ef8d11777c259d584cb1d7fb2ca6dbd6928755cdac48280686179056bc9e5d80520d77bf427fc6cfd700f1e4067805150f7b9c2f325b4a387257868b'; // Replace with your actual API token
 
 // Strapi API helper functions
 async function fetchFromStrapi(endpoint) {
