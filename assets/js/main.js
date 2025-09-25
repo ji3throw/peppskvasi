@@ -48,8 +48,11 @@ function groupPeppsareByGeneration(peppsare) {
 
 // Create person card HTML
 function createPersonCard(person) {
+	// Check if the URL is already complete (starts with http/https)
 	const profileImage = person.Profilbild?.url 
-		? `${STRAPI_MEDIA_URL}${person.Profilbild.url}` 
+		? (person.Profilbild.url.startsWith('http') 
+			? person.Profilbild.url 
+			: `${STRAPI_MEDIA_URL}${person.Profilbild.url}`)
 		: 'assets/images/pagen.jpg'; // fallback image
 	
 	// Debug logging
