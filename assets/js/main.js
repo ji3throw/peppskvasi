@@ -1,6 +1,7 @@
-// Strapi API configuration
-const STRAPI_API_URL = 'https://artistic-nurture-ef3b87498b.strapiapp.com/api';
-const STRAPI_API_TOKEN = '6a9cf10cf2949fdeb65e54962c00b1ee338e601271c8e5d4b9f28f29a94ebed9f40777a794d6850a12c60c21b726ef25eb1b7ff8982ceb5a3246f8372a5019be3f792521ef8d11777c259d584cb1d7fb2ca6dbd6928755cdac48280686179056bc9e5d80520d77bf427fc6cfd700f1e4067805150f7b9c2f325b4a387257868b'; // Replace with your actual API token
+// Strapi API configuration - loaded from environment config
+const STRAPI_API_URL = window.ENV_CONFIG?.STRAPI_API_URL || 'https://artistic-nurture-ef3b87498b.strapiapp.com/api';
+const STRAPI_API_TOKEN = window.ENV_CONFIG?.STRAPI_API_TOKEN || 'b92e18ec3c4acfff11b6f5ad39e0cd0e65fb69cb55b162cbe6f1951ddf4f2b739efba3962078aabad0b99d1faa9cc726b45d2143909c355d15126a4fabd84d54dc8f8bdd1bd6c86e1164665a46d3f536150a6a3ed019daca0ff103747c730d449a1d26d99fee9f0922c96b375c769b6c7cc147a7b85fc58c862bec943d091a1c';
+const STRAPI_MEDIA_URL = window.ENV_CONFIG?.STRAPI_MEDIA_URL || 'https://artistic-nurture-ef3b87498b.strapiapp.com';
 
 // Strapi API helper functions
 async function fetchFromStrapi(endpoint) {
@@ -48,12 +49,16 @@ function groupPeppsareByGeneration(peppsare) {
 // Create person card HTML
 function createPersonCard(person) {
 	const profileImage = person.Profilbild?.url 
-		? `http://localhost:1337${person.Profilbild.url}` 
+		? `${STRAPI_MEDIA_URL}${person.Profilbild.url}` 
 		: 'assets/images/pagen.jpg'; // fallback image
+	
+	// Debug logging
+	console.log('Person:', person.Namn, 'Profile Image URL:', person.Profilbild?.url);
+	console.log('Full Image URL:', profileImage);
 	
 	return `
 		<article class="person-card">
-			<img src="${profileImage}" alt="${person.Namn}" class="avatar" onerror="this.src='assets/images/pagen.jpg'">
+			<img src="${profileImage}" alt="${person.Namn}" class="avatar" onerror="console.log('Image failed to load:', this.src); this.src='assets/images/pagen.jpg'">
 			<h3>${person.Namn}</h3>
 			<p class="muted">${person.Generation || 'Yngel'}</p>
 		</article>
@@ -78,12 +83,16 @@ function createMemberGroup(generation, members) {
 // Load and display peppsare data
 async function loadPeppsare() {
 	const peppsare = await fetchPeppsare();
+	console.log('Fetched peppsare data:', peppsare);
+	
 	if (peppsare.length === 0) {
 		console.warn('No peppsare data found or error loading from Strapi');
 		return;
 	}
 	
 	const groupedPeppsare = groupPeppsareByGeneration(peppsare);
+	console.log('Grouped peppsare:', groupedPeppsare);
+	
 	const medlemmarSection = document.getElementById('medlemmar');
 	const container = medlemmarSection.querySelector('.container');
 	
