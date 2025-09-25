@@ -19,7 +19,7 @@ html, body {
 	padding: 0;
 	background: var(--bg);
 	color: var(--text);
-	font-family: "Kalam", "Comic Sans MS", "Comic Sans", "Chalkboard SE", "Marker Felt", "Bradley Hand", "Brush Script MT", "Lucida Handwriting", cursive;
+	font-family: "Comic Sans MS", "Comic Sans", "Kalam", "Chalkboard SE", "Marker Felt", "Bradley Hand", "Brush Script MT", "Lucida Handwriting", cursive;
 	line-height: 1.6;
 }
 

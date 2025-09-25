@@ -7,7 +7,13 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Font fallbacks are handled by the main CSS font stack */
+/* Font fallbacks for different devices */
+/* iOS devices - use Kalam web font since Comic Sans is not available */
+.device-iphone,
+.device-ipad,
+.device-ipod {
+  font-family: "Kalam", "Chalkboard SE", "Marker Felt", "Bradley Hand", "Brush Script MT", "Lucida Handwriting", cursive;
+}
 
 /* iPhone specific styles */
 .device-iphone .hero {
