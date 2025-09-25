@@ -5,8 +5,6 @@ export default [
   {
     name: 'strapi::cors',
     config: {
-      enabled: true,
-      headers: '*',
       origin: [
         'http://localhost:3000',
         'http://localhost:8080',
@@ -17,7 +15,10 @@ export default [
         'https://ji3throw.github.io/peppskvasi',
         // For development, you can also use wildcard (not recommended for production)
         // '*'
-      ]
+      ],
+      methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'HEAD', 'OPTIONS'],
+      headers: ['Content-Type', 'Authorization', 'Origin', 'Accept'],
+      keepHeaderOnError: true,
     }
   },
   'strapi::poweredBy',
