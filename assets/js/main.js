@@ -31,7 +31,7 @@ async function fetchPeppsare() {
 	return data?.data || [];
 }
 
-// Group peppsare by generation
+// Group peppsare by generation with dynamic ordering
 function groupPeppsareByGeneration(peppsare) {
 	const groups = {};
 	
@@ -43,7 +43,51 @@ function groupPeppsareByGeneration(peppsare) {
 		groups[generation].push(person);
 	});
 	
-	return groups;
+	// Get all generation names
+	const allGenerations = Object.keys(groups);
+	
+	// Separate special generations from numbered generations
+	const specialGenerations = allGenerations.filter(gen => gen === 'OG' || gen === 'Yngel');
+	const numberedGenerations = allGenerations.filter(gen => gen.startsWith('Gen '));
+	
+	// Sort numbered generations numerically (Gen 1, Gen 2, Gen 3, etc.)
+	numberedGenerations.sort((a, b) => {
+		const numA = parseInt(a.replace('Gen ', ''));
+		const numB = parseInt(b.replace('Gen ', ''));
+		return numA - numB;
+	});
+	
+	// Build the final order: OG first, then numbered generations, then Yngel last
+	const generationOrder = [];
+	
+	// Add OG first (if it exists)
+	if (groups['OG']) {
+		generationOrder.push('OG');
+	}
+	
+	// Add numbered generations in order
+	generationOrder.push(...numberedGenerations);
+	
+	// Add Yngel last (if it exists)
+	if (groups['Yngel']) {
+		generationOrder.push('Yngel');
+	}
+	
+	// Add any other unexpected generations at the end
+	const otherGenerations = allGenerations.filter(gen => 
+		gen !== 'OG' && gen !== 'Yngel' && !gen.startsWith('Gen ')
+	);
+	generationOrder.push(...otherGenerations);
+	
+	// Create ordered groups object
+	const orderedGroups = {};
+	generationOrder.forEach(gen => {
+		if (groups[gen]) {
+			orderedGroups[gen] = groups[gen];
+		}
+	});
+	
+	return orderedGroups;
 }
 
 // Create person card HTML
@@ -106,6 +150,9 @@ async function loadPeppsare() {
 	}
 	
 	const groupedPeppsare = groupPeppsareByGeneration(peppsare);
+	
+	// Debug: Log the generation order
+	console.log('Final generation order:', Object.keys(groupedPeppsare));
 	
 	const medlemmarSection = document.getElementById('medlemmar');
 	const container = medlemmarSection.querySelector('.container');
