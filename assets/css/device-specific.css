@@ -1,0 +1,62 @@
+/* Device-specific styles for Apple devices */
+
+/* General Apple device styles */
+.apple-device {
+  /* Better font rendering for Apple devices */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Font fallbacks are handled by the main CSS font stack */
+
+/* iPhone specific styles */
+.device-iphone .hero {
+  /* Example: Adjust hero section for iPhone */
+  padding: 2rem 0;
+}
+
+.device-iphone .person-card {
+  /* Example: Smaller cards on iPhone */
+  margin: 0.5rem;
+}
+
+/* iPad specific styles */
+.device-ipad .container {
+  /* Example: Wider containers on iPad */
+  max-width: 1200px;
+}
+
+.device-ipad .card-grid {
+  /* Example: More columns on iPad */
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+}
+
+/* Mac specific styles */
+.device-mac .site-header {
+  /* Example: Different header styling on Mac */
+  backdrop-filter: blur(10px);
+  background: rgba(255, 255, 255, 0.8);
+}
+
+/* Non-Apple device styles */
+.device-android .person-card img,
+.device-windows .person-card img {
+  /* Example: Different image styling for non-Apple devices */
+  border-radius: 8px;
+}
+
+/* Touch device optimizations */
+@media (hover: none) and (pointer: coarse) {
+  .apple-device .person-card:hover {
+    /* Disable hover effects on touch devices */
+    transform: none;
+  }
+}
+
+/* High DPI display optimizations for Apple devices */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  .apple-device .hero-image {
+    /* Example: Use higher resolution images on Retina displays */
+    image-rendering: -webkit-optimize-contrast;
+  }
+}

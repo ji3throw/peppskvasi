@@ -122,6 +122,110 @@ async function loadPeppsare() {
 	});
 }
 
+// Device detection utilities
+function detectAppleDevice() {
+	const userAgent = navigator.userAgent.toLowerCase();
+	
+	// Check for various Apple devices and browsers
+	const isAppleDevice = 
+		userAgent.includes('iphone') ||
+		userAgent.includes('ipad') ||
+		userAgent.includes('ipod') ||
+		userAgent.includes('macintosh') ||
+		userAgent.includes('mac os x') ||
+		userAgent.includes('safari') && userAgent.includes('version') ||
+		// Check for iOS devices (even if user agent is spoofed)
+		(navigator.platform && navigator.platform.toLowerCase().includes('mac')) ||
+		// Check for touch devices that are likely iOS
+		('ontouchend' in document && window.screen && window.screen.width <= 1024);
+	
+	return isAppleDevice;
+}
+
+function getDeviceInfo() {
+	const userAgent = navigator.userAgent.toLowerCase();
+	const isApple = detectAppleDevice();
+	
+	let deviceType = 'unknown';
+	let deviceName = 'Unknown Device';
+	
+	if (isApple) {
+		if (userAgent.includes('iphone')) {
+			deviceType = 'iphone';
+			deviceName = 'iPhone';
+		} else if (userAgent.includes('ipad')) {
+			deviceType = 'ipad';
+			deviceName = 'iPad';
+		} else if (userAgent.includes('ipod')) {
+			deviceType = 'ipod';
+			deviceName = 'iPod';
+		} else if (userAgent.includes('macintosh') || userAgent.includes('mac os x')) {
+			deviceType = 'mac';
+			deviceName = 'Mac';
+		} else {
+			deviceType = 'apple-other';
+			deviceName = 'Apple Device';
+		}
+	} else {
+		if (userAgent.includes('android')) {
+			deviceType = 'android';
+			deviceName = 'Android';
+		} else if (userAgent.includes('windows')) {
+			deviceType = 'windows';
+			deviceName = 'Windows';
+		} else if (userAgent.includes('linux')) {
+			deviceType = 'linux';
+			deviceName = 'Linux';
+		}
+	}
+	
+	return {
+		isApple: isApple,
+		deviceType: deviceType,
+		deviceName: deviceName,
+		userAgent: navigator.userAgent
+	};
+}
+
+
+// Add device detection to the page
+function addDeviceDetection() {
+	const deviceInfo = getDeviceInfo();
+	
+	// Add device class to body for CSS targeting
+	document.body.classList.add(`device-${deviceInfo.deviceType}`);
+	if (deviceInfo.isApple) {
+		document.body.classList.add('apple-device');
+	}
+	
+	return deviceInfo;
+}
+
+// Global utility functions for device detection
+window.DeviceDetection = {
+	// Check if current device is Apple
+	isApple: () => detectAppleDevice(),
+	
+	// Get full device info
+	getInfo: () => getDeviceInfo(),
+	
+	// Check specific device types
+	isiPhone: () => getDeviceInfo().deviceType === 'iphone',
+	isiPad: () => getDeviceInfo().deviceType === 'ipad',
+	isMac: () => getDeviceInfo().deviceType === 'mac',
+	isAndroid: () => getDeviceInfo().deviceType === 'android',
+	isWindows: () => getDeviceInfo().deviceType === 'windows',
+	
+	// Check if device supports touch
+	isTouchDevice: () => 'ontouchstart' in window || navigator.maxTouchPoints > 0,
+	
+	// Check if device is mobile
+	isMobile: () => {
+		const info = getDeviceInfo();
+		return info.deviceType === 'iphone' || info.deviceType === 'ipad' || info.deviceType === 'android';
+	}
+};
+
 document.addEventListener('DOMContentLoaded', function () {
 	const yearEl = document.getElementById('year');
 	if (yearEl) yearEl.textContent = new Date().getFullYear();
@@ -135,6 +239,9 @@ document.addEventListener('DOMContentLoaded', function () {
 			links.style.display = expanded ? 'none' : 'flex';
 		});
 	}
+	
+	// Detect Apple device and add device info
+	const deviceInfo = addDeviceDetection();
 	
 	// Load peppsare data from Strapi
 	loadPeppsare();
