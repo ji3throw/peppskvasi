@@ -55,19 +55,16 @@ function createPersonCard(person) {
 			: `${STRAPI_MEDIA_URL}${person.Profilbild.url}`)
 		: 'assets/images/pagen.jpg'; // fallback image
 	
-	// Debug logging
-	console.log('Person:', person.Namn, 'Profile Image URL:', person.Profilbild?.url);
-	console.log('Full Image URL:', profileImage);
-	console.log('STRAPI_MEDIA_URL:', STRAPI_MEDIA_URL);
+	// Debug logging (can be removed in production)
+	// console.log('Person:', person.Namn, 'Profile Image URL:', person.Profilbild?.url);
+	// console.log('Full Image URL:', profileImage);
 	
 	return `
 		<article class="person-card">
 			<img src="${profileImage}" 
 				 alt="${person.Namn}" 
 				 class="avatar" 
-				 onload="console.log('Image loaded successfully:', this.src)"
-				 onerror="console.log('Image failed to load:', this.src, 'Error details:', event); this.src='assets/images/pagen.jpg'"
-				 style="border: 2px solid red; max-width: 100px; height: auto;">
+				 onerror="this.src='assets/images/pagen.jpg'">
 			<h3>${person.Namn}</h3>
 			<p class="muted">${person.Generation || 'Yngel'}</p>
 		</article>
@@ -89,14 +86,12 @@ function createMemberGroup(generation, members) {
 	`;
 }
 
-// Test image URL accessibility
+// Test image URL accessibility (for debugging)
 async function testImageUrl(url) {
 	try {
 		const response = await fetch(url, { method: 'HEAD' });
-		console.log(`Image URL test: ${url} - Status: ${response.status}`);
 		return response.ok;
 	} catch (error) {
-		console.log(`Image URL test failed: ${url} - Error:`, error);
 		return false;
 	}
 }
@@ -104,23 +99,13 @@ async function testImageUrl(url) {
 // Load and display peppsare data
 async function loadPeppsare() {
 	const peppsare = await fetchPeppsare();
-	console.log('Fetched peppsare data:', peppsare);
 	
 	if (peppsare.length === 0) {
 		console.warn('No peppsare data found or error loading from Strapi');
 		return;
 	}
 	
-	// Test image URLs
-	for (const person of peppsare) {
-		if (person.Profilbild?.url) {
-			const fullUrl = `${STRAPI_MEDIA_URL}${person.Profilbild.url}`;
-			await testImageUrl(fullUrl);
-		}
-	}
-	
 	const groupedPeppsare = groupPeppsareByGeneration(peppsare);
-	console.log('Grouped peppsare:', groupedPeppsare);
 	
 	const medlemmarSection = document.getElementById('medlemmar');
 	const container = medlemmarSection.querySelector('.container');
