@@ -55,10 +55,16 @@ function createPersonCard(person) {
 	// Debug logging
 	console.log('Person:', person.Namn, 'Profile Image URL:', person.Profilbild?.url);
 	console.log('Full Image URL:', profileImage);
+	console.log('STRAPI_MEDIA_URL:', STRAPI_MEDIA_URL);
 	
 	return `
 		<article class="person-card">
-			<img src="${profileImage}" alt="${person.Namn}" class="avatar" onerror="console.log('Image failed to load:', this.src); this.src='assets/images/pagen.jpg'">
+			<img src="${profileImage}" 
+				 alt="${person.Namn}" 
+				 class="avatar" 
+				 onload="console.log('Image loaded successfully:', this.src)"
+				 onerror="console.log('Image failed to load:', this.src, 'Error details:', event); this.src='assets/images/pagen.jpg'"
+				 style="border: 2px solid red; max-width: 100px; height: auto;">
 			<h3>${person.Namn}</h3>
 			<p class="muted">${person.Generation || 'Yngel'}</p>
 		</article>
@@ -80,6 +86,18 @@ function createMemberGroup(generation, members) {
 	`;
 }
 
+// Test image URL accessibility
+async function testImageUrl(url) {
+	try {
+		const response = await fetch(url, { method: 'HEAD' });
+		console.log(`Image URL test: ${url} - Status: ${response.status}`);
+		return response.ok;
+	} catch (error) {
+		console.log(`Image URL test failed: ${url} - Error:`, error);
+		return false;
+	}
+}
+
 // Load and display peppsare data
 async function loadPeppsare() {
 	const peppsare = await fetchPeppsare();
@@ -88,6 +106,14 @@ async function loadPeppsare() {
 	if (peppsare.length === 0) {
 		console.warn('No peppsare data found or error loading from Strapi');
 		return;
+	}
+	
+	// Test image URLs
+	for (const person of peppsare) {
+		if (person.Profilbild?.url) {
+			const fullUrl = `${STRAPI_MEDIA_URL}${person.Profilbild.url}`;
+			await testImageUrl(fullUrl);
+		}
 	}
 	
 	const groupedPeppsare = groupPeppsareByGeneration(peppsare);
