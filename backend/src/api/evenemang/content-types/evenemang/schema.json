@@ -1,9 +1,9 @@
 {
   "kind": "collectionType",
-  "collectionName": "evenemangs",
+  "collectionName": "evenemags",
   "info": {
-    "singularName": "evenemang",
-    "pluralName": "evenemangs",
+    "singularName": "evenemag",
+    "pluralName": "evenemags",
     "displayName": "Evenemang"
   },
   "options": {

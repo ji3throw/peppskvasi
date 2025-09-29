@@ -4,4 +4,4 @@
 
 import { factories } from '@strapi/strapi'
 
-export default factories.createCoreController('api::evenemang.evenemang');
+export default factories.createCoreController('api::evenemag.evenemag');

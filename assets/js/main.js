@@ -36,7 +36,7 @@ async function fetchPeppsare() {
 
 // Fetch evenemang data from Strapi
 async function fetchEvenemang() {
-	const data = await fetchFromStrapi('/evenemangs?populate=*');
+	const data = await fetchFromStrapi('/evenemags?populate=*');
 	return data?.data || [];
 }
 
