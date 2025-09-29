@@ -513,6 +513,9 @@ export interface ApiPeppsarePeppsare extends Struct.CollectionTypeSchema {
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
+    Favoritcitat: Schema.Attribute.String;
+    Favoritdryck: Schema.Attribute.String;
+    Favoritmelodi: Schema.Attribute.String;
     Generation: Schema.Attribute.String;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<

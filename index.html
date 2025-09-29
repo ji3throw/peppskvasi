@@ -65,7 +65,7 @@
 			<div class="container">
 				<h2>Evenemang</h2>
 				<p class="section-lead">Ibland gör vi saker, tänka sig!</p>
-				<!-- Event data will be loaded dynamically from Strapi -->
+				<!-- Event data will be loaded dynamically -->
 			</div>
 		</section>
 
@@ -112,6 +112,29 @@
 			<p>Pepps <span id="year"></span></p>
 		</div>
 	</footer>
+
+	<!-- Member Detail Modal -->
+	<div id="memberModal" class="modal-overlay">
+		<div class="modal-content">
+			<button class="modal-close" aria-label="Stäng modal">&times;</button>
+			<div class="modal-body">
+				<div class="member-detail">
+					<div class="member-header">
+						<div class="member-info">
+							<h2 id="modalMemberName"></h2>
+							<p id="modalMemberGeneration" class="member-generation"></p>
+						</div>
+					</div>
+					<div class="member-image">
+						<img id="modalMemberImage" src="" alt="" class="modal-avatar">
+					</div>
+					<div id="modalMemberDetails" class="member-details">
+						<!-- Additional member details will be populated here -->
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 
 	<script type="module" src="scripts/load-env.js"></script>
 	<script src="assets/js/main.js"></script>

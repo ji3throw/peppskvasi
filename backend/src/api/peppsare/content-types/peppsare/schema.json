@@ -29,6 +29,15 @@
     },
     "Skauning": {
       "type": "boolean"
+    },
+    "Favoritdryck": {
+      "type": "string"
+    },
+    "Favoritmelodi": {
+      "type": "string"
+    },
+    "Favoritcitat": {
+      "type": "string"
     }
   }
 }

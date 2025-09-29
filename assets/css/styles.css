@@ -381,6 +381,143 @@ section#evenemang .card-grid .event-card h3 {
 	color: var(--bg) !important;
 }
 
+/* Member Modal Styles */
+.modal-overlay {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background: rgba(0, 0, 0, 0.8);
+	backdrop-filter: blur(4px);
+	display: none;
+	justify-content: center;
+	align-items: center;
+	z-index: 1000;
+	padding: 20px;
+}
+
+.modal-overlay.active {
+	display: flex;
+}
+
+.modal-content {
+	background: var(--bg);
+	border: 1px solid var(--border);
+	border-radius: 16px;
+	max-width: 800px;
+	width: 100%;
+	max-height: 90vh;
+	overflow: hidden;
+	position: relative;
+	box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+}
+
+.modal-close {
+	position: absolute;
+	top: 16px;
+	right: 16px;
+	background: rgba(255, 255, 255, 0.2);
+	border: 1px solid rgba(255, 255, 255, 0.3);
+	color: var(--text);
+	font-size: 24px;
+	width: 40px;
+	height: 40px;
+	border-radius: 50%;
+	cursor: pointer;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	z-index: 1001;
+	transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.modal-close:hover {
+	background: rgba(255, 255, 255, 0.3);
+	border-color: rgba(255, 255, 255, 0.5);
+}
+
+.modal-body {
+	padding: 40px;
+	overflow-y: auto;
+	max-height: 90vh;
+}
+
+.member-detail {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	grid-template-rows: auto auto;
+	gap: 24px 40px;
+	align-items: start;
+}
+
+.member-header {
+	grid-column: 1;
+	grid-row: 1;
+}
+
+.member-image {
+	grid-column: 1;
+	grid-row: 2;
+	text-align: center;
+}
+
+.member-details {
+	grid-column: 2;
+	grid-row: 2;
+}
+
+.modal-avatar {
+	width: 250px;
+	height: 250px;
+	object-fit: cover;
+	border-radius: 12px;
+	border: 3px solid var(--primary);
+	margin: 0 auto;
+}
+
+.member-info h2 {
+	margin: 0 0 8px 0;
+	color: var(--primary);
+	font-size: 1.5rem;
+	text-align: left;
+}
+
+.member-generation {
+	color: var(--muted);
+	font-size: 1.1rem;
+	margin: 0 0 24px 0;
+	text-align: left;
+}
+
+.member-details {
+	color: var(--text);
+	line-height: 1.6;
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
+}
+
+.member-details p {
+	margin: 0 0 12px 0;
+	font-size: 1rem;
+}
+
+.member-details p:last-child {
+	margin-bottom: 0;
+}
+
+/* Make person cards clickable */
+.person-card {
+	cursor: pointer;
+	transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.person-card:hover {
+	transform: translateY(-2px);
+	box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
 /* Responsive design for statistics */
 @media (max-width: 768px) {
 	.statistics-section {
@@ -400,6 +537,48 @@ section#evenemang .card-grid .event-card h3 {
 	
 	.line-graph {
 		height: 150px;
+	}
+	
+	/* Modal responsive design */
+	.modal-content {
+		margin: 10px;
+		max-height: 95vh;
+	}
+	
+	.modal-body {
+		padding: 20px;
+	}
+	
+	.member-detail {
+		grid-template-columns: 1fr;
+		grid-template-rows: auto auto auto;
+		gap: 16px;
+	}
+	
+	.member-header {
+		grid-column: 1;
+		grid-row: 1;
+		text-align: center;
+	}
+	
+	.member-image {
+		grid-column: 1;
+		grid-row: 2;
+	}
+	
+	.member-details {
+		grid-column: 1;
+		grid-row: 3;
+	}
+	
+	.member-info h2,
+	.member-generation {
+		text-align: center;
+	}
+	
+	.modal-avatar {
+		width: 180px;
+		height: 180px;
 	}
 }
 

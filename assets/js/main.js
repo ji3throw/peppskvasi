@@ -108,12 +108,9 @@ function createPersonCard(person) {
 			: `${STRAPI_MEDIA_URL}${person.Profilbild.url}`)
 		: 'assets/images/pagen.jpg'; // fallback image
 	
-	// Debug logging (can be removed in production)
-	// console.log('Person:', person.Namn, 'Profile Image URL:', person.Profilbild?.url);
-	// console.log('Full Image URL:', profileImage);
 	
 	return `
-		<article class="person-card">
+		<article class="person-card" data-member='${JSON.stringify(person).replace(/'/g, "&#39;")}'>
 			<img src="${profileImage}" 
 				 alt="${person.Namn}" 
 				 class="avatar" 
@@ -254,7 +251,7 @@ function createStatisticsDisplay(stats) {
 				</div>
 			</div>
 			<div class="generation-graph">
-				<h3>Skåningar per generation</h3>
+				<h3>Skåningar i Pepps över tid</h3>
 				<div class="graph-container">
 					<svg viewBox="0 0 400 200" class="line-graph">
 						${createLineGraph(stats.byGeneration)}
@@ -382,6 +379,24 @@ async function loadPeppsare() {
 		const groupHtml = createMemberGroup(generation, groupedPeppsare[generation]);
 		container.insertAdjacentHTML('beforeend', groupHtml);
 	});
+	
+	// Add click event listeners to person cards
+	setupPersonCardClickListeners();
+}
+
+// Setup click listeners for person cards
+function setupPersonCardClickListeners() {
+	const personCards = document.querySelectorAll('.person-card');
+	personCards.forEach(card => {
+		card.addEventListener('click', () => {
+			try {
+				const memberData = JSON.parse(card.getAttribute('data-member'));
+				openMemberModal(memberData);
+			} catch (error) {
+				console.error('Error parsing member data:', error);
+			}
+		});
+	});
 }
 
 // Load and display evenemang data
@@ -418,6 +433,86 @@ async function loadEvenemang() {
 	});
 	
 	container.appendChild(cardGrid);
+}
+
+// Modal functionality
+function openMemberModal(member) {
+	const modal = document.getElementById('memberModal');
+	const modalImage = document.getElementById('modalMemberImage');
+	const modalName = document.getElementById('modalMemberName');
+	const modalGeneration = document.getElementById('modalMemberGeneration');
+	const modalDetails = document.getElementById('modalMemberDetails');
+	
+	// Set member image
+	const profileImage = member.Profilbild?.url 
+		? (member.Profilbild.url.startsWith('http') 
+			? member.Profilbild.url 
+			: `${STRAPI_MEDIA_URL}${member.Profilbild.url}`)
+		: 'assets/images/pagen.jpg';
+	
+	modalImage.src = profileImage;
+	modalImage.alt = member.Namn;
+	
+	// Set member name and generation
+	modalName.textContent = member.Namn;
+	
+	// Set member details with new fields in single column
+	let detailsHtml = '';
+	
+	// Add Skauning status
+	if (member.Skauning !== undefined) {
+		detailsHtml += `<p><strong>Skåning:</strong> ${member.Skauning ? 'Ja' : 'Nej'}</p>`;
+	}
+	
+	// Add favorite drink
+	if (member.Favoritdryck) {
+		detailsHtml += `<p><strong>Favoritdryck:</strong> ${member.Favoritdryck}</p>`;
+	}
+	
+	// Add favorite melody
+	if (member.Favoritmelodi) {
+		detailsHtml += `<p><strong>Favoritmelodi:</strong> ${member.Favoritmelodi}</p>`;
+	}
+	
+	// Add favorite quote
+	if (member.Favoritcitat) {
+		detailsHtml += `<p><strong>Favoritcitat:</strong> "${member.Favoritcitat}"</p>`;
+	}
+	
+	modalDetails.innerHTML = detailsHtml;
+	
+	// Show modal
+	modal.classList.add('active');
+	document.body.style.overflow = 'hidden'; // Prevent background scrolling
+}
+
+function closeMemberModal() {
+	const modal = document.getElementById('memberModal');
+	modal.classList.remove('active');
+	document.body.style.overflow = ''; // Restore scrolling
+}
+
+// Event listeners for modal
+function setupModalEventListeners() {
+	const modal = document.getElementById('memberModal');
+	const closeButton = modal.querySelector('.modal-close');
+	
+	// Close button click
+	closeButton.addEventListener('click', closeMemberModal);
+	
+	// Click outside modal to close
+	modal.addEventListener('click', (e) => {
+		if (e.target === modal) {
+			closeMemberModal();
+		}
+	});
+	
+	// Escape key to close
+	document.addEventListener('keydown', (e) => {
+		if (e.key === 'Escape' && modal.classList.contains('active')) {
+			closeMemberModal();
+		}
+	});
 }
 
 // Device detection utilities
@@ -540,6 +635,9 @@ document.addEventListener('DOMContentLoaded', function () {
 	
 	// Detect Apple device and add device info
 	const deviceInfo = addDeviceDetection();
+	
+	// Setup modal event listeners
+	setupModalEventListeners();
 	
 	// Load peppsare data from Strapi
 	loadPeppsare();
