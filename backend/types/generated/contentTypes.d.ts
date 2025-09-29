@@ -467,12 +467,12 @@ export interface AdminUser extends Struct.CollectionTypeSchema {
   };
 }
 
-export interface ApiEvenemangEvenemang extends Struct.CollectionTypeSchema {
-  collectionName: 'evenemangs';
+export interface ApiEvenemagEvenemag extends Struct.CollectionTypeSchema {
+  collectionName: 'evenemags';
   info: {
     displayName: 'Evenemang';
-    pluralName: 'evenemangs';
-    singularName: 'evenemang';
+    pluralName: 'evenemags';
+    singularName: 'evenemag';
   };
   options: {
     draftAndPublish: true;
@@ -486,7 +486,7 @@ export interface ApiEvenemangEvenemang extends Struct.CollectionTypeSchema {
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<
       'oneToMany',
-      'api::evenemang.evenemang'
+      'api::evenemag.evenemag'
     > &
       Schema.Attribute.Private;
     Plats: Schema.Attribute.String;
@@ -1046,7 +1046,7 @@ declare module '@strapi/strapi' {
       'admin::transfer-token': AdminTransferToken;
       'admin::transfer-token-permission': AdminTransferTokenPermission;
       'admin::user': AdminUser;
-      'api::evenemang.evenemang': ApiEvenemangEvenemang;
+      'api::evenemag.evenemag': ApiEvenemagEvenemag;
       'api::peppsare.peppsare': ApiPeppsarePeppsare;
       'plugin::content-releases.release': PluginContentReleasesRelease;
       'plugin::content-releases.release-action': PluginContentReleasesReleaseAction;
