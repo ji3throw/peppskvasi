@@ -1,10 +1,10 @@
 // Strapi API configuration - loaded from environment config
-//const STRAPI_API_URL = window.ENV_CONFIG?.STRAPI_API_URL || 'https://artistic-nurture-ef3b87498b.strapiapp.com/api';
-const STRAPI_API_URL = 'http://localhost:1337/api';
-const STRAPI_API_TOKEN = '1aa47abd1b6dbcbd7dedf326c68d8b10b45b5f00d7d543f3bb9c7504dabdb2f275d2c88a98565671565985de1736f349d4766ce52775bc5bd9caf38aaea533638b6e0759e3f3964348150147ad6e471d3f6395eb8dd862b5379c6b98690f9255fefdaa80d36f8880d3ad57ca9d942168931604da2f343013147b8a2bc0c0e624';
-// const STRAPI_API_TOKEN = window.ENV_CONFIG?.STRAPI_API_TOKEN || 'b92e18ec3c4acfff11b6f5ad39e0cd0e65fb69cb55b162cbe6f1951ddf4f2b739efba3962078aabad0b99d1faa9cc726b45d2143909c355d15126a4fabd84d54dc8f8bdd1bd6c86e1164665a46d3f536150a6a3ed019daca0ff103747c730d449a1d26d99fee9f0922c96b375c769b6c7cc147a7b85fc58c862bec943d091a1c';
-//const STRAPI_MEDIA_URL = window.ENV_CONFIG?.STRAPI_MEDIA_URL || 'https://artistic-nurture-ef3b87498b.strapiapp.com';
-const STRAPI_MEDIA_URL = 'http://localhost:1337';
+const STRAPI_API_URL = window.ENV_CONFIG?.STRAPI_API_URL || 'https://artistic-nurture-ef3b87498b.strapiapp.com/api';
+//const STRAPI_API_URL = 'http://localhost:1337/api';
+//const STRAPI_API_TOKEN = '1aa47abd1b6dbcbd7dedf326c68d8b10b45b5f00d7d543f3bb9c7504dabdb2f275d2c88a98565671565985de1736f349d4766ce52775bc5bd9caf38aaea533638b6e0759e3f3964348150147ad6e471d3f6395eb8dd862b5379c6b98690f9255fefdaa80d36f8880d3ad57ca9d942168931604da2f343013147b8a2bc0c0e624';
+const STRAPI_API_TOKEN = window.ENV_CONFIG?.STRAPI_API_TOKEN || 'b92e18ec3c4acfff11b6f5ad39e0cd0e65fb69cb55b162cbe6f1951ddf4f2b739efba3962078aabad0b99d1faa9cc726b45d2143909c355d15126a4fabd84d54dc8f8bdd1bd6c86e1164665a46d3f536150a6a3ed019daca0ff103747c730d449a1d26d99fee9f0922c96b375c769b6c7cc147a7b85fc58c862bec943d091a1c';
+const STRAPI_MEDIA_URL = window.ENV_CONFIG?.STRAPI_MEDIA_URL || 'https://artistic-nurture-ef3b87498b.strapiapp.com';
+//const STRAPI_MEDIA_URL = 'http://localhost:1337';
 
 // Strapi API helper functions
 async function fetchFromStrapi(endpoint) {
