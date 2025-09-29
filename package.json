@@ -1,0 +1,26 @@
+{
+  "name": "pepps-frontend",
+  "version": "1.0.0",
+  "description": "Pepps association website frontend",
+  "scripts": {
+    "dev": "npm run build:dev && npm run serve",
+    "dev:proxy": "npm run build:dev && npm run proxy & npm run serve",
+    "build:dev": "node scripts/build.js development",
+    "build:prod": "node scripts/build.js production",
+    "serve": "npx http-server . -p 3000 -o",
+    "proxy": "node scripts/cors-proxy.js",
+    "test:cors": "node scripts/test-cors.js",
+    "test:urls": "node scripts/test-image-urls.js",
+    "deploy:dev": "npm run build:dev",
+    "deploy:prod": "npm run build:prod"
+  },
+  "devDependencies": {
+    "http-server": "^14.1.1",
+    "express": "^4.18.2",
+    "http-proxy-middleware": "^2.0.6",
+    "cors": "^2.8.5"
+  },
+  "keywords": ["pepps", "association", "website", "frontend"],
+  "author": "Pepps",
+  "license": "MIT"
+}

@@ -61,7 +61,15 @@
 			</div>
 		</section>
 
-		<section id="konika" class="section">
+		<section id="evenemang" class="section">
+			<div class="container">
+				<h2>Evenemang</h2>
+				<p class="section-lead">Ibland gör vi saker, tänka sig!</p>
+				<!-- Event data will be loaded dynamically from Strapi -->
+			</div>
+		</section>
+
+		<section id="konika" class="section alt">
 			<div class="container narrow">
 				<h2>Krönika</h2>
 				<p>Hur startade Pepps? Vad har hänt över åren? Det mesta är nog bortsupet, men allt går det att läsa lite grann om oss här.</p>
@@ -74,34 +82,17 @@
 			</div>
 		</section>
 
-		<section id="medlemmar" class="section alt">
+		<section id="medlemmar" class="section">
 			<div class="container">
 				<h2>Medlemmar</h2>
 				<!-- Member data will be loaded dynamically from Strapi -->
 			</div>
 		</section>
-<!-- 
-		<section id="evenemang" class="section alt">
-			<div class="container">
-				<h2>Evenemang</h2>
-				<p class="section-lead">Lägg in kommande eller tidigare event. </p>
-				<div class="card-grid">
-					<article class="event-card">
-						<h3>Eventnamn</h3>
-						<p class="muted">Datum • Plats</p>
-						<p>Kort beskrivning av eventet.</p>
-						<a class="btn small" href="#kontakt">Intresseanmälan</a>
-					</article>
-				</div>
-			</div>
-		</section>
--->
-		<section id="kontakt" class="section">
+
+		<section id="kontakt" class="section alt">
 			<div class="container narrow">
 				<h2>Kontakta oss</h2>
-				<p>Följ oss i sociala medier eller mejla oss. <!-- Replace text/links --></p>
 				<div class="socials">
-					<!-- Drop your own SVGs into assets/images/icons/ and they will load here -->
 					<a class="social" href="https://www.facebook.com/profile.php?id=100080069520995" target="_blank" rel="noopener" aria-label="Facebook">
 						<img src="assets/images/icons/facebook.svg" alt="Facebook">
 					</a>
@@ -122,6 +113,7 @@
 		</div>
 	</footer>
 
+	<script type="module" src="scripts/load-env.js"></script>
 	<script src="assets/js/main.js"></script>
 </body>
 </html>

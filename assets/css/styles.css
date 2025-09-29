@@ -206,7 +206,7 @@ h2::after {
 
 .section { padding: 56px 0; }
 .section.alt { background: var(--bg-alt); }
-.section .section-lead { color: var(--muted); }
+.section .section-lead { color: var(--primary); }
 
 .grid.two { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; align-items: center; }
 .rounded { border-radius: 14px; border: 1px solid var(--border); }
@@ -216,6 +216,7 @@ h2::after {
 .card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 18px; padding: 18px; }
 
 .person-card, .event-card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 18px;}
+.event-card h3, .event-card p { color: var(--text); }
 .member-group { margin-top: 16px; background: rgba(255,255,255,0.06); border: 1px solid var(--border); border-radius: 12px; }
 .member-group > summary { list-style: none; cursor: pointer; padding: 14px 16px; font-weight: 700; color: var(--accent); }
 .member-group[open] > summary { border-bottom: 1px solid var(--border); }
@@ -223,6 +224,184 @@ h2::after {
 .person-card .avatar { width: 100%; aspect-ratio: 1/1; object-fit: cover; border-radius: 10px; margin-bottom: 10px; }
 .person-card h3, .person-card p { color: var(--bg); }
 .muted { color: var(--muted); }
+
+/* Statistics Section */
+.statistics-section {
+	display: grid;
+	grid-template-columns: 1fr 2fr;
+	gap: 2rem;
+	margin-bottom: 3rem;
+	padding: 2rem;
+	background: rgba(255,255,255,0.05);
+	border-radius: 12px;
+	border: 1px solid var(--border);
+}
+
+.stats-overview h3,
+.generation-graph h3 {
+	margin: 0 0 1.5rem 0;
+	color: var(--primary);
+	font-size: 1.3rem;
+}
+
+.percentage-display {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 1rem;
+}
+
+.percentage-circle {
+	position: relative;
+	width: 120px;
+	height: 120px;
+}
+
+.percentage-svg {
+	width: 100%;
+	height: 100%;
+	transform: rotate(-90deg);
+}
+
+.percentage-bg {
+	fill: none;
+	stroke: rgba(255,255,255,0.2);
+	stroke-width: 8;
+}
+
+.percentage-fill {
+	fill: none;
+	stroke: var(--primary);
+	stroke-width: 8;
+	stroke-linecap: round;
+	transition: stroke-dashoffset 0.8s ease-in-out;
+}
+
+.percentage-text {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	text-align: center;
+}
+
+.percentage-number {
+	display: block;
+	font-size: 2rem;
+	font-weight: 700;
+	color: var(--primary);
+	line-height: 1;
+}
+
+.percentage-label {
+	display: block;
+	font-size: 0.9rem;
+	color: var(--muted);
+	margin-top: 0.25rem;
+}
+
+.stats-details p {
+	margin: 0;
+	text-align: center;
+	color: var(--muted);
+}
+
+/* Graph Styles */
+.graph-container {
+	background: rgba(0,0,0,0.1);
+	border-radius: 8px;
+	padding: 1rem;
+}
+
+.line-graph {
+	width: 100%;
+	height: 200px;
+}
+
+.grid-line {
+	stroke: rgba(255,255,255,0.1);
+	stroke-width: 1;
+}
+
+.grid-label {
+	fill: var(--muted);
+	font-size: 12px;
+	font-family: "Inter", sans-serif;
+}
+
+.line-path {
+	fill: none;
+	stroke: var(--primary);
+	stroke-width: 3;
+	stroke-linecap: round;
+	stroke-linejoin: round;
+}
+
+.data-point {
+	fill: var(--primary);
+	stroke: var(--bg);
+	stroke-width: 2;
+	cursor: pointer;
+	transition: all 0.2s ease;
+}
+
+.data-point:hover {
+	fill: var(--primary-700);
+	r: 6;
+}
+
+.point-label {
+	fill: var(--text);
+	font-size: 11px;
+	font-weight: 600;
+	font-family: "Inter", sans-serif;
+}
+
+.generation-label {
+	fill: var(--muted);
+	font-size: 12px;
+	font-family: "Inter", sans-serif;
+}
+
+/* Override general h3, p color for event cards */
+.card-grid .event-card p, 
+.card-grid .event-card h3 { 
+	color: var(--bg) !important; 
+}
+
+/* Also target the specific event card section */
+#evenemang .event-card p,
+#evenemang .event-card h3 {
+	color: var(--bg) !important;
+}
+
+/* Even more specific targeting */
+section#evenemang .card-grid .event-card p,
+section#evenemang .card-grid .event-card h3 {
+	color: var(--bg) !important;
+}
+
+/* Responsive design for statistics */
+@media (max-width: 768px) {
+	.statistics-section {
+		grid-template-columns: 1fr;
+		gap: 1.5rem;
+		padding: 1.5rem;
+	}
+	
+	.percentage-circle {
+		width: 100px;
+		height: 100px;
+	}
+	
+	.percentage-number {
+		font-size: 1.5rem;
+	}
+	
+	.line-graph {
+		height: 150px;
+	}
+}
 
 .logo-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 18px; align-items: center; list-style: none; padding: 0; margin: 20px 0 0; }
 .logo-row img { max-height: 46px; margin: 0 auto; opacity: 0.9; filter: none; }

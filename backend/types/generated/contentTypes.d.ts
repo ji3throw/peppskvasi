@@ -467,10 +467,42 @@ export interface AdminUser extends Struct.CollectionTypeSchema {
   };
 }
 
+export interface ApiEvenemangEvenemang extends Struct.CollectionTypeSchema {
+  collectionName: 'evenemangs';
+  info: {
+    displayName: 'Evenemang';
+    pluralName: 'evenemangs';
+    singularName: 'evenemang';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    Datum: Schema.Attribute.String;
+    Link: Schema.Attribute.String;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::evenemang.evenemang'
+    > &
+      Schema.Attribute.Private;
+    Plats: Schema.Attribute.String;
+    publishedAt: Schema.Attribute.DateTime;
+    Tagline: Schema.Attribute.String;
+    Titel: Schema.Attribute.String;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
 export interface ApiPeppsarePeppsare extends Struct.CollectionTypeSchema {
   collectionName: 'peppsares';
   info: {
-    displayName: 'peppsare';
+    displayName: 'Peppsare';
     pluralName: 'peppsares';
     singularName: 'peppsare';
   };
@@ -493,6 +525,7 @@ export interface ApiPeppsarePeppsare extends Struct.CollectionTypeSchema {
       'images' | 'files' | 'videos' | 'audios'
     >;
     publishedAt: Schema.Attribute.DateTime;
+    Skauning: Schema.Attribute.Boolean;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -1010,6 +1043,7 @@ declare module '@strapi/strapi' {
       'admin::transfer-token': AdminTransferToken;
       'admin::transfer-token-permission': AdminTransferTokenPermission;
       'admin::user': AdminUser;
+      'api::evenemang.evenemang': ApiEvenemangEvenemang;
       'api::peppsare.peppsare': ApiPeppsarePeppsare;
       'plugin::content-releases.release': PluginContentReleasesRelease;
       'plugin::content-releases.release-action': PluginContentReleasesReleaseAction;

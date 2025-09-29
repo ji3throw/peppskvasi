@@ -1,7 +1,10 @@
 // Strapi API configuration - loaded from environment config
-const STRAPI_API_URL = window.ENV_CONFIG?.STRAPI_API_URL || 'https://artistic-nurture-ef3b87498b.strapiapp.com/api';
-const STRAPI_API_TOKEN = window.ENV_CONFIG?.STRAPI_API_TOKEN || 'b92e18ec3c4acfff11b6f5ad39e0cd0e65fb69cb55b162cbe6f1951ddf4f2b739efba3962078aabad0b99d1faa9cc726b45d2143909c355d15126a4fabd84d54dc8f8bdd1bd6c86e1164665a46d3f536150a6a3ed019daca0ff103747c730d449a1d26d99fee9f0922c96b375c769b6c7cc147a7b85fc58c862bec943d091a1c';
-const STRAPI_MEDIA_URL = window.ENV_CONFIG?.STRAPI_MEDIA_URL || 'https://artistic-nurture-ef3b87498b.strapiapp.com';
+//const STRAPI_API_URL = window.ENV_CONFIG?.STRAPI_API_URL || 'https://artistic-nurture-ef3b87498b.strapiapp.com/api';
+const STRAPI_API_URL = 'http://localhost:1337/api';
+const STRAPI_API_TOKEN = '1aa47abd1b6dbcbd7dedf326c68d8b10b45b5f00d7d543f3bb9c7504dabdb2f275d2c88a98565671565985de1736f349d4766ce52775bc5bd9caf38aaea533638b6e0759e3f3964348150147ad6e471d3f6395eb8dd862b5379c6b98690f9255fefdaa80d36f8880d3ad57ca9d942168931604da2f343013147b8a2bc0c0e624';
+// const STRAPI_API_TOKEN = window.ENV_CONFIG?.STRAPI_API_TOKEN || 'b92e18ec3c4acfff11b6f5ad39e0cd0e65fb69cb55b162cbe6f1951ddf4f2b739efba3962078aabad0b99d1faa9cc726b45d2143909c355d15126a4fabd84d54dc8f8bdd1bd6c86e1164665a46d3f536150a6a3ed019daca0ff103747c730d449a1d26d99fee9f0922c96b375c769b6c7cc147a7b85fc58c862bec943d091a1c';
+//const STRAPI_MEDIA_URL = window.ENV_CONFIG?.STRAPI_MEDIA_URL || 'https://artistic-nurture-ef3b87498b.strapiapp.com';
+const STRAPI_MEDIA_URL = 'http://localhost:1337';
 
 // Strapi API helper functions
 async function fetchFromStrapi(endpoint) {
@@ -28,6 +31,12 @@ async function fetchFromStrapi(endpoint) {
 // Fetch peppsare data from Strapi
 async function fetchPeppsare() {
 	const data = await fetchFromStrapi('/peppsares?populate=*');
+	return data?.data || [];
+}
+
+// Fetch evenemang data from Strapi
+async function fetchEvenemang() {
+	const data = await fetchFromStrapi('/evenemangs?populate=*');
 	return data?.data || [];
 }
 
@@ -130,6 +139,20 @@ function createMemberGroup(generation, members) {
 	`;
 }
 
+// Create event card HTML
+function createEventCard(event) {
+	const linkHtml = event.Link ? `<a href="${event.Link}" target="_blank" rel="noopener">Anmäl dig här</a>` : '';
+	
+	return `
+		<article class="event-card">
+			<h3>${event.Titel || 'Evenemang'}</h3>
+			<p class="muted">${event.Datum || ''}${event.Plats ? ` • ${event.Plats}` : ''}</p>
+			<p>${event.Tagline || ''}</p>
+			${linkHtml}
+		</article>
+	`;
+}
+
 // Test image URL accessibility (for debugging)
 async function testImageUrl(url) {
 	try {
@@ -140,19 +163,202 @@ async function testImageUrl(url) {
 	}
 }
 
+// Show test statistics when no data is available
+function showTestStatistics() {
+	console.log('Showing test statistics...');
+	const medlemmarSection = document.getElementById('medlemmar');
+	const container = medlemmarSection.querySelector('.container');
+	
+	// Clear existing content except the title
+	const title = container.querySelector('h2');
+	container.innerHTML = '';
+	container.appendChild(title);
+	
+	// Create test statistics
+	const testStats = {
+		total: 10,
+		withSkauning: 6,
+		percentage: 60,
+		byGeneration: {
+			'OG': { total: 3, withSkauning: 2, percentage: 67 },
+			'Gen 1': { total: 4, withSkauning: 3, percentage: 75 },
+			'Yngel': { total: 3, withSkauning: 1, percentage: 33 }
+		}
+	};
+	
+	const statisticsHtml = createStatisticsDisplay(testStats);
+	console.log('Test statistics HTML:', statisticsHtml);
+	container.insertAdjacentHTML('beforeend', statisticsHtml);
+	
+	// Add a test message
+	container.insertAdjacentHTML('beforeend', '<p style="color: #D4AF37; text-align: center; margin-top: 1rem;">Test data - No real data loaded from Strapi</p>');
+}
+
+// Calculate statistics from peppsare data
+function calculateStatistics(peppsare) {
+	console.log('Calculating statistics for peppsare:', peppsare);
+	
+	const stats = {
+		total: peppsare.length,
+		withSkauning: peppsare.filter(person => person.Skauning === true).length,
+		percentage: 0,
+		byGeneration: {}
+	};
+	
+	console.log('Basic stats:', { total: stats.total, withSkauning: stats.withSkauning });
+	
+	// Calculate overall percentage
+	if (stats.total > 0) {
+		stats.percentage = Math.round((stats.withSkauning / stats.total) * 100);
+	}
+	
+	// Group by generation and calculate stats
+	const groupedPeppsare = groupPeppsareByGeneration(peppsare);
+	
+	Object.keys(groupedPeppsare).forEach(generation => {
+		const generationMembers = groupedPeppsare[generation];
+		const withSkauning = generationMembers.filter(person => person.Skauning === true).length;
+		
+		stats.byGeneration[generation] = {
+			total: generationMembers.length,
+			withSkauning: withSkauning,
+			percentage: generationMembers.length > 0 ? Math.round((withSkauning / generationMembers.length) * 100) : 0
+		};
+	});
+	
+	return stats;
+}
+
+// Create statistics display HTML
+function createStatisticsDisplay(stats) {
+	return `
+		<div class="statistics-section">
+			<div class="stats-overview">
+				<h3>Statistik</h3>
+				<div class="percentage-display">
+					<div class="percentage-circle">
+						<svg viewBox="0 0 100 100" class="percentage-svg">
+							<circle cx="50" cy="50" r="45" class="percentage-bg"></circle>
+							<circle cx="50" cy="50" r="45" class="percentage-fill" 
+									stroke-dasharray="${2 * Math.PI * 45}" 
+									stroke-dashoffset="${2 * Math.PI * 45 * (1 - stats.percentage / 100)}"></circle>
+						</svg>
+						<div class="percentage-text">
+							<span class="percentage-number">${stats.percentage}%</span>
+						</div>
+					</div>
+					<div class="stats-details">
+						<p><strong>${stats.withSkauning}</strong> av <strong>${stats.total}</strong> peppsare är skåningar</p>
+						<p>Resten önskar att de var det</p>
+					</div>
+				</div>
+			</div>
+			<div class="generation-graph">
+				<h3>Skåningar per generation</h3>
+				<div class="graph-container">
+					<svg viewBox="0 0 400 200" class="line-graph">
+						${createLineGraph(stats.byGeneration)}
+					</svg>
+				</div>
+			</div>
+		</div>
+	`;
+}
+
+// Create line graph SVG
+function createLineGraph(generationStats) {
+	const generations = Object.keys(generationStats);
+	if (generations.length === 0) return '';
+	
+	// Calculate cumulative statistics
+	let cumulativeTotal = 0;
+	let cumulativeSkauning = 0;
+	const cumulativePoints = [];
+	
+	generations.forEach(generation => {
+		cumulativeTotal += generationStats[generation].total;
+		cumulativeSkauning += generationStats[generation].withSkauning;
+		const cumulativePercentage = Math.round((cumulativeSkauning / cumulativeTotal) * 100);
+		
+		cumulativePoints.push({
+			generation,
+			total: cumulativeTotal,
+			withSkauning: cumulativeSkauning,
+			percentage: cumulativePercentage
+		});
+	});
+	
+	const maxPercentage = Math.max(...cumulativePoints.map(point => point.percentage));
+	const minPercentage = Math.min(...cumulativePoints.map(point => point.percentage));
+	const percentageRange = maxPercentage - minPercentage;
+	const padding = 40;
+	const width = 400 - (padding * 2);
+	const height = 200 - (padding * 2);
+	
+	// Calculate points for the line (cumulative percentages)
+	const points = cumulativePoints.map((point, index) => {
+		const x = padding + (index * (width / (generations.length - 1)));
+		// Scale based on the actual range of percentages
+		const normalizedPercentage = percentageRange > 0 ? 
+			(point.percentage - minPercentage) / percentageRange : 0.5;
+		const y = padding + height - (normalizedPercentage * height);
+		return { x, y, generation: point.generation, percentage: point.percentage, total: point.total, withSkauning: point.withSkauning };
+	});
+	
+	// Create line path
+	const pathData = points.map((point, index) => 
+		`${index === 0 ? 'M' : 'L'} ${point.x} ${point.y}`
+	).join(' ');
+	
+	// Create grid lines
+	const gridLines = [];
+	for (let i = 0; i <= 4; i++) {
+		const y = padding + (i * height / 4);
+		gridLines.push(`
+			<line x1="${padding}" y1="${y}" x2="${padding + width}" y2="${y}" class="grid-line"/>
+		`);
+	}
+	
+	// Create generation labels
+	const genLabels = points.map(point => `
+		<text x="${point.x}" y="${height + padding + 20}" class="generation-label" text-anchor="middle">${point.generation}</text>
+	`);
+	
+	// Create dots and tooltips
+	const dots = points.map(point => `
+		<circle cx="${point.x}" cy="${point.y}" r="4" class="data-point" data-generation="${point.generation}" data-percentage="${point.percentage}" data-total="${point.total}" data-skauning="${point.withSkauning}"/>
+		<text x="${point.x}" y="${point.y - 10}" class="point-label" text-anchor="middle">${point.percentage}%</text>
+	`);
+	
+	return `
+		${gridLines.join('')}
+		<path d="${pathData}" class="line-path"/>
+		${dots.join('')}
+		${genLabels.join('')}
+	`;
+}
+
 // Load and display peppsare data
 async function loadPeppsare() {
+	console.log('Starting to load peppsare data...');
+	console.log('Environment config:', window.ENV_CONFIG);
+	
 	const peppsare = await fetchPeppsare();
+	console.log('Fetched peppsare data:', peppsare);
 	
 	if (peppsare.length === 0) {
 		console.warn('No peppsare data found or error loading from Strapi');
+		// Show a test statistics section even with no data
+		showTestStatistics();
 		return;
 	}
 	
 	const groupedPeppsare = groupPeppsareByGeneration(peppsare);
+	const statistics = calculateStatistics(peppsare);
 	
 	// Debug: Log the generation order
 	console.log('Final generation order:', Object.keys(groupedPeppsare));
+	console.log('Statistics:', statistics);
 	
 	const medlemmarSection = document.getElementById('medlemmar');
 	const container = medlemmarSection.querySelector('.container');
@@ -162,11 +368,56 @@ async function loadPeppsare() {
 	container.innerHTML = '';
 	container.appendChild(title);
 	
+	// Add statistics section
+	const statisticsHtml = createStatisticsDisplay(statistics);
+	console.log('Statistics HTML:', statisticsHtml);
+	container.insertAdjacentHTML('beforeend', statisticsHtml);
+	
+	// Add a simple test to see if the section was added
+	const statsSection = container.querySelector('.statistics-section');
+	console.log('Statistics section found:', statsSection);
+	
 	// Add each generation group
 	Object.keys(groupedPeppsare).forEach(generation => {
 		const groupHtml = createMemberGroup(generation, groupedPeppsare[generation]);
 		container.insertAdjacentHTML('beforeend', groupHtml);
 	});
+}
+
+// Load and display evenemang data
+async function loadEvenemang() {
+	console.log('Starting to load evenemang data...');
+	
+	const evenemang = await fetchEvenemang();
+	console.log('Fetched evenemang data:', evenemang);
+	
+	const evenemangSection = document.getElementById('evenemang');
+	const container = evenemangSection.querySelector('.container');
+	
+	// Clear existing content except the title and section lead
+	const title = container.querySelector('h2');
+	const sectionLead = container.querySelector('.section-lead');
+	container.innerHTML = '';
+	container.appendChild(title);
+	container.appendChild(sectionLead);
+	
+	if (evenemang.length === 0) {
+		console.warn('No evenemang data found or error loading from Strapi');
+		container.insertAdjacentHTML('beforeend', '<p>Inga evenemang tillgängliga för tillfället.</p>');
+		return;
+	}
+	
+	// Create card grid container
+	const cardGrid = document.createElement('div');
+	cardGrid.className = 'card-grid';
+	
+	// Add each event card
+	evenemang.forEach(event => {
+		const eventCard = createEventCard(event);
+		cardGrid.insertAdjacentHTML('beforeend', eventCard);
+	});
+	
+	container.appendChild(cardGrid);
 }
 
 // Device detection utilities
@@ -292,5 +543,8 @@ document.addEventListener('DOMContentLoaded', function () {
 	
 	// Load peppsare data from Strapi
 	loadPeppsare();
+	
+	// Load evenemang data from Strapi
+	loadEvenemang();
 });
 

@@ -1,0 +1,30 @@
+{
+  "kind": "collectionType",
+  "collectionName": "evenemangs",
+  "info": {
+    "singularName": "evenemang",
+    "pluralName": "evenemangs",
+    "displayName": "Evenemang"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "Titel": {
+      "type": "string"
+    },
+    "Datum": {
+      "type": "string"
+    },
+    "Plats": {
+      "type": "string"
+    },
+    "Tagline": {
+      "type": "string"
+    },
+    "Link": {
+      "type": "string"
+    }
+  }
+}

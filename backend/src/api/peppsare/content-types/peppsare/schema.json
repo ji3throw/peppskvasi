@@ -4,7 +4,7 @@
   "info": {
     "singularName": "peppsare",
     "pluralName": "peppsares",
-    "displayName": "peppsare"
+    "displayName": "Peppsare"
   },
   "options": {
     "draftAndPublish": true
@@ -26,6 +26,9 @@
         "videos",
         "audios"
       ]
+    },
+    "Skauning": {
+      "type": "boolean"
     }
   }
 }
